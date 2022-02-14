@@ -8,7 +8,14 @@
 import UIKit
 import SpriteKit
 
-class Level00: SKScene {
+struct PhysicsCategories {
+    static let Player : UInt32 = 0x1 << 0
+    static let MapEdge : UInt32 = 0x1 << 1
+//    static let Redball : UInt32 = 0x1 << 2
+}
+
+class Level00: SKScene, SKPhysicsContactDelegate {
+    
 
     let goBackLabel = SKLabelNode(text: "Go Back")
     
@@ -28,6 +35,8 @@ class Level00: SKScene {
     var move: Bool = false
     var location = CGPoint.zero
     
+    let cameraNode = SKCameraNode()
+    
     override func didMove(to view: SKView) {
         room1.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         room1.xScale = 0.8
@@ -41,6 +50,9 @@ class Level00: SKScene {
         barrier1.physicsBody?.restitution = 0
         barrier1.physicsBody?.allowsRotation = false
         barrier1.physicsBody?.isDynamic = false
+        barrier1.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
+        barrier1.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier1.name = "outerBarrier"
         
         barrier2.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier2.xScale = 0.8
@@ -50,6 +62,9 @@ class Level00: SKScene {
         barrier2.physicsBody?.restitution = 0
         barrier2.physicsBody?.allowsRotation = false
         barrier2.physicsBody?.isDynamic = false
+        barrier2.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
+        barrier2.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier2.name = "outerBarrier"
         
         barrier3.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier3.xScale = 0.8
@@ -59,6 +74,9 @@ class Level00: SKScene {
         barrier3.physicsBody?.restitution = 0
         barrier3.physicsBody?.allowsRotation = false
         barrier3.physicsBody?.isDynamic = false
+        barrier3.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
+        barrier3.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier3.name = "outerBarrier"
         
         barrier4.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier4.xScale = 0.8
@@ -68,6 +86,9 @@ class Level00: SKScene {
         barrier4.physicsBody?.restitution = 0
         barrier4.physicsBody?.allowsRotation = false
         barrier4.physicsBody?.isDynamic = false
+        barrier4.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
+        barrier4.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier4.name = "outerBarrier"
         
         worldGroup.addChild(room1)
         worldGroup.addChild(barrier1)
@@ -83,12 +104,22 @@ class Level00: SKScene {
         player.physicsBody?.affectedByGravity = false
         player.physicsBody?.restitution = 0
         player.physicsBody?.allowsRotation = false
-        player.physicsBody?.isDynamic = true
+//        player.physicsBody?.isDynamic = false
+        player.physicsBody?.categoryBitMask = PhysicsCategories.Player
+        player.physicsBody?.contactTestBitMask = PhysicsCategories.MapEdge
+        player.name = "playerName"
         addChild(player)
+        
+        addChild(cameraNode)
+        camera = cameraNode
+        cameraNode.position = player.position
+        
         
         goBackLabel.name = "goBackName"
         goBackLabel.position = CGPoint(x: size.width*0.2,y: size.height*0.9)
         addChild(goBackLabel)
+        
+        self.scene?.physicsWorld.contactDelegate = self
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -98,21 +129,18 @@ class Level00: SKScene {
         
         let touchLocation = touch.location(in: self)
         let touchedNode = atPoint(touchLocation)
-        
-        
+
         
         if(touchedNode.name == "goBackName"){
             let gameScene = GameScene(size: size)
             view?.presentScene(gameScene)
         }
         
-//        worldGroup.position.x += 10
-        
     }
+
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         move = true
-        print("Is touched")
         for touch in touches {
             location = touch.location(in: self)
         }
@@ -123,10 +151,15 @@ class Level00: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        
+        
         if(move){
             if(location.x > player.position.x) {
                 player.position.x += 0.8
-                worldGroup.position.x -= 0.6
+//                if(!stopCamera){
+//                    worldGroup.position.x -= 0.8
+//                }
+//                worldGroup.position.x -= 0.8
                 if(location.y > player.position.y){
                     player.position.y += 0.8
                     
@@ -135,7 +168,10 @@ class Level00: SKScene {
                 }
             } else if (location.x < player.position.x){
                 player.position.x -= 0.8
-                worldGroup.position.x += 0.6
+//                if(!stopCamera){
+//                    worldGroup.position.x += 0.8
+//                }
+//                worldGroup.position.x += 0.8
                 if(location.y > player.position.y){
                     player.position.y += 0.8
                     
@@ -148,5 +184,6 @@ class Level00: SKScene {
                 player.position.y -= 0.8
             }
         }
+        cameraNode.position = player.position
     }
 }

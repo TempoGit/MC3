@@ -15,6 +15,11 @@ class Level00: SKScene {
     let room1 = SKSpriteNode(imageNamed: "Room 1")
     
     let barrier1 = SKSpriteNode(imageNamed: "Barrier1")
+    let barrier2 = SKSpriteNode(imageNamed: "Barrier2")
+    let barrier3 = SKSpriteNode(imageNamed: "Barrier3")
+    let barrier4 = SKSpriteNode(imageNamed: "Barrier4")
+    
+    
     
     var worldGroup = SKSpriteNode()
     
@@ -37,8 +42,38 @@ class Level00: SKScene {
         barrier1.physicsBody?.allowsRotation = false
         barrier1.physicsBody?.isDynamic = false
         
+        barrier2.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
+        barrier2.xScale = 0.8
+        barrier2.yScale = 0.8
+        barrier2.physicsBody = SKPhysicsBody(texture: barrier2.texture!, size: barrier2.size)
+        barrier2.physicsBody?.affectedByGravity = false
+        barrier2.physicsBody?.restitution = 0
+        barrier2.physicsBody?.allowsRotation = false
+        barrier2.physicsBody?.isDynamic = false
+        
+        barrier3.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
+        barrier3.xScale = 0.8
+        barrier3.yScale = 0.8
+        barrier3.physicsBody = SKPhysicsBody(texture: barrier3.texture!, size: barrier3.size)
+        barrier3.physicsBody?.affectedByGravity = false
+        barrier3.physicsBody?.restitution = 0
+        barrier3.physicsBody?.allowsRotation = false
+        barrier3.physicsBody?.isDynamic = false
+        
+        barrier4.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
+        barrier4.xScale = 0.8
+        barrier4.yScale = 0.8
+        barrier4.physicsBody = SKPhysicsBody(texture: barrier4.texture!, size: barrier4.size)
+        barrier4.physicsBody?.affectedByGravity = false
+        barrier4.physicsBody?.restitution = 0
+        barrier4.physicsBody?.allowsRotation = false
+        barrier4.physicsBody?.isDynamic = false
+        
         worldGroup.addChild(room1)
         worldGroup.addChild(barrier1)
+        worldGroup.addChild(barrier2)
+        worldGroup.addChild(barrier3)
+        worldGroup.addChild(barrier4)
         addChild(worldGroup)
         
         player.position = CGPoint(x: size.width*0.5, y: size.height*0.35)
@@ -71,7 +106,7 @@ class Level00: SKScene {
             view?.presentScene(gameScene)
         }
         
-        worldGroup.position.x += 10
+//        worldGroup.position.x += 10
         
     }
     
@@ -107,16 +142,11 @@ class Level00: SKScene {
                 } else if(location.y < player.position.y){
                     player.position.y -= 0.8
                 }
+            } else if (location.y > player.position.y){
+                player.position.y += 0.8
+            } else if (location.y < player.position.y){
+                player.position.y -= 0.8
             }
-//            if(location.y != player.position.y){
-//                if( (location.x - player.position.x) > 0 ){
-//                    player.position.x += 0.5
-//                    print(location.x)
-//                } else if ( (location.x - player.position.x) < 0 ){
-//                    player.position.x -= 0.5
-//                    print(location.x)
-//                }
-//            }
         }
     }
 }

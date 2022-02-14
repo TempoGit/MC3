@@ -33,9 +33,12 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     let player = SKSpriteNode(imageNamed: "PlayerBox")
     
     var move: Bool = false
+    var moveSingle: Bool = false
     var location = CGPoint.zero
     
     let cameraNode = SKCameraNode()
+    
+    let squareTest1 = SKShapeNode(rectOf: CGSize(width: 100,height: 100))
     
     override func didMove(to view: SKView) {
         room1.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
@@ -52,6 +55,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier1.physicsBody?.isDynamic = false
         barrier1.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
         barrier1.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier1.alpha = 0.01
         barrier1.name = "outerBarrier"
         
         barrier2.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
@@ -64,6 +68,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier2.physicsBody?.isDynamic = false
         barrier2.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
         barrier2.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier2.alpha = 0.01
         barrier2.name = "outerBarrier"
         
         barrier3.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
@@ -76,6 +81,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier3.physicsBody?.isDynamic = false
         barrier3.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
         barrier3.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier3.alpha = 0.01
         barrier3.name = "outerBarrier"
         
         barrier4.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
@@ -88,6 +94,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier4.physicsBody?.isDynamic = false
         barrier4.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
         barrier4.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        barrier4.alpha = 0.01
         barrier4.name = "outerBarrier"
         
         worldGroup.addChild(room1)
@@ -119,6 +126,11 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         goBackLabel.position = CGPoint(x: size.width*0.2,y: size.height*0.9)
         addChild(goBackLabel)
         
+        squareTest1.position = CGPoint(x: size.width*0.8,y: size.height*0.3)
+        squareTest1.fillColor = .black
+        squareTest1.strokeColor = .black
+        addChild(squareTest1)
+        
         self.scene?.physicsWorld.contactDelegate = self
     }
     
@@ -136,10 +148,18 @@ class Level00: SKScene, SKPhysicsContactDelegate {
             view?.presentScene(gameScene)
         }
         
+        if(touchLocation != player.position){
+            location = touchLocation
+            moveSingle = true
+//            let movePlayerAction = SKAction.move(to: touchLocation, duration: 1)
+//            player.run(movePlayerAction)
+        }
     }
 
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        player.removeAllActions()
+        moveSingle = false
         move = true
         for touch in touches {
             location = touch.location(in: self)
@@ -153,7 +173,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         
         
-        if(move){
+        if(move || moveSingle){
             if(location.x > player.position.x) {
                 player.position.x += 0.8
 //                if(!stopCamera){
@@ -185,5 +205,27 @@ class Level00: SKScene, SKPhysicsContactDelegate {
             }
         }
         cameraNode.position = player.position
+        
+        checkCollisions()
+    }
+    
+    func checkCollisions(){
+        if(player.frame.intersects(self.squareTest1.frame)){
+            print("Intersection")
+//            squareTest1.zPosition = 5
+//            player.zPosition = 10
+            print(squareTest1.position.x)
+            print(player.position.x)
+            if(squareTest1.position.x > player.position.x){
+                squareTest1.alpha = 0.2
+            } else {
+                squareTest1.alpha = 1
+                player.zPosition = 10
+            }
+            
+        } else {
+            print("Don't intersect")
+            squareTest1.alpha = 1
+        }
     }
 }

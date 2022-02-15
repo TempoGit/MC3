@@ -25,6 +25,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     let barrier2 = SKSpriteNode(imageNamed: "Barrier2")
     let barrier3 = SKSpriteNode(imageNamed: "Barrier3")
     let barrier4 = SKSpriteNode(imageNamed: "Barrier4")
+    let music = SKAction.playSoundFileNamed("academy", waitForCompletion: false)
     
     let gameArea: CGRect
     
@@ -222,6 +223,8 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         cameraNode.position = player.position
         
         checkCollisions()
+        run(music)
+    
     }
     
     func checkCollisions(){

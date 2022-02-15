@@ -28,10 +28,10 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     
     let room1 = SKSpriteNode(imageNamed: "Room 1")
     
-    let barrier1 = SKSpriteNode(imageNamed: "Barrier1")
-    let barrier2 = SKSpriteNode(imageNamed: "Barrier2")
-    let barrier3 = SKSpriteNode(imageNamed: "Barrier3")
-    let barrier4 = SKSpriteNode(imageNamed: "Barrier4")
+    let barrier1 = SKSpriteNode(imageNamed: "BarrierRight")
+    let barrier2 = SKSpriteNode(imageNamed: "BarrierDown")
+    let barrier3 = SKSpriteNode(imageNamed: "BarrierUp")
+    let barrier4 = SKSpriteNode(imageNamed: "BarrierLeft")
     let music = SKAction.playSoundFileNamed("academy", waitForCompletion: false)
     
     let gameArea: CGRect
@@ -51,7 +51,10 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     
     var worldGroup = SKSpriteNode()
     
-    let player = SKSpriteNode(imageNamed: "PlayerBox")
+//    let player = SKSpriteNode(imageNamed: "PlayerBox")
+    let player = SKSpriteNode()
+    let characterAvatar = SKSpriteNode(imageNamed: "Character")
+    let characterFeetCollider = SKSpriteNode(imageNamed: "CharacterFeet")
     
     var move: Bool = false
     var moveSingle: Bool = false
@@ -65,6 +68,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         room1.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         room1.xScale = 0.8
         room1.yScale = 0.8
+//        room1.zPosition = 1
         
         barrier1.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier1.xScale = 0.8
@@ -78,7 +82,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier1.physicsBody?.contactTestBitMask = PhysicsCategories.Player
         barrier1.alpha = 0.01
         barrier1.name = "outerBarrier"
-        
         barrier2.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier2.xScale = 0.8
         barrier2.yScale = 0.8
@@ -91,7 +94,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier2.physicsBody?.contactTestBitMask = PhysicsCategories.Player
         barrier2.alpha = 0.01
         barrier2.name = "outerBarrier"
-        
         barrier3.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier3.xScale = 0.8
         barrier3.yScale = 0.8
@@ -104,7 +106,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier3.physicsBody?.contactTestBitMask = PhysicsCategories.Player
         barrier3.alpha = 0.01
         barrier3.name = "outerBarrier"
-        
         barrier4.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier4.xScale = 0.8
         barrier4.yScale = 0.8
@@ -117,6 +118,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         barrier4.physicsBody?.contactTestBitMask = PhysicsCategories.Player
         barrier4.alpha = 0.01
         barrier4.name = "outerBarrier"
+
         
         worldGroup.addChild(room1)
         worldGroup.addChild(barrier1)
@@ -125,22 +127,43 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         worldGroup.addChild(barrier4)
         addChild(worldGroup)
         
+        
+        characterAvatar.xScale = 0.5
+        characterAvatar.yScale = 0.5
+        characterAvatar.zPosition = 5
+        characterFeetCollider.position = CGPoint(x: size.width*0.5,y: size.height*0.35)
+        characterFeetCollider.xScale = 0.5
+        characterFeetCollider.yScale = 0.5
+        characterFeetCollider.physicsBody = SKPhysicsBody(texture: characterFeetCollider.texture!, size: characterFeetCollider.size)
+        characterFeetCollider.physicsBody?.affectedByGravity = false
+        characterFeetCollider.physicsBody?.restitution = 0
+        characterFeetCollider.physicsBody?.allowsRotation = false
+//        characterFeetCollider.physicsBody?.isDynamic = false
+        characterFeetCollider.physicsBody?.categoryBitMask = PhysicsCategories.Player
+        characterFeetCollider.physicsBody?.contactTestBitMask = PhysicsCategories.MapEdge
+        addChild(characterAvatar)
+        addChild(characterFeetCollider)
+        
+//        player.addChild(characterFeetCollider)
+//        player.addChild(characterAvatar)
+//        player.addChild(characterFeetCollider)
         player.position = CGPoint(x: size.width*0.5, y: size.height*0.35)
-        player.xScale = 0.12
-        player.yScale = 0.12
-        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
-        player.physicsBody?.affectedByGravity = false
-        player.physicsBody?.restitution = 0
-        player.physicsBody?.allowsRotation = false
+//        player.xScale = 0.12
+//        player.yScale = 0.12
+//        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+//        player.physicsBody?.affectedByGravity = false
+//        player.physicsBody?.restitution = 0
+//        player.physicsBody?.allowsRotation = false
 //        player.physicsBody?.isDynamic = false
-        player.physicsBody?.categoryBitMask = PhysicsCategories.Player
-        player.physicsBody?.contactTestBitMask = PhysicsCategories.MapEdge
+//        player.physicsBody?.categoryBitMask = PhysicsCategories.Player
+//        player.physicsBody?.contactTestBitMask = PhysicsCategories.MapEdge
         player.name = "playerName"
+//        player.zPosition = 3
         addChild(player)
         
         addChild(cameraNode)
         camera = cameraNode
-        cameraNode.position = player.position
+        cameraNode.position = characterAvatar.position
         
         
         goBackLabel.name = "goBackName"
@@ -217,55 +240,55 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         
         
         if(move || moveSingle){
-            if(location.x > player.position.x) {
-                player.position.x += 0.8
+            if(location.x > characterFeetCollider.position.x) {
+                characterFeetCollider.position.x += 0.8
 //                if(!stopCamera){
 //                    worldGroup.position.x -= 0.8
 //                }
 //                worldGroup.position.x -= 0.8
-                if(location.y > player.position.y){
-                    player.position.y += 0.8
+                if(location.y > characterFeetCollider.position.y){
+                    characterFeetCollider.position.y += 0.8
                     
-                } else if(location.y < player.position.y){
-                    player.position.y -= 0.8
+                } else if(location.y < characterFeetCollider.position.y){
+                    characterFeetCollider.position.y -= 0.8
                 }
-            } else if (location.x < player.position.x){
-                player.position.x -= 0.8
+            } else if (location.x < characterFeetCollider.position.x){
+                characterFeetCollider.position.x -= 0.8
 //                if(!stopCamera){
 //                    worldGroup.position.x += 0.8
 //                }
 //                worldGroup.position.x += 0.8
-                if(location.y > player.position.y){
-                    player.position.y += 0.8
+                if(location.y > characterFeetCollider.position.y){
+                    characterFeetCollider.position.y += 0.8
                     
-                } else if(location.y < player.position.y){
-                    player.position.y -= 0.8
+                } else if(location.y < characterFeetCollider.position.y){
+                    characterFeetCollider.position.y -= 0.8
                 }
-            } else if (location.y > player.position.y){
-                player.position.y += 0.8
-            } else if (location.y < player.position.y){
-                player.position.y -= 0.8
+            } else if (location.y > characterFeetCollider.position.y){
+                characterFeetCollider.position.y += 0.8
+            } else if (location.y < characterFeetCollider.position.y){
+                characterFeetCollider.position.y -= 0.8
             }
         }
-        cameraNode.position = player.position
-        
+        characterAvatar.position = characterFeetCollider.position
+        cameraNode.position = characterAvatar.position
         checkCollisions()
         
     
     }
     
     func checkCollisions(){
-        if(player.frame.intersects(self.squareTest1.frame)){
+        if(characterAvatar.frame.intersects(self.squareTest1.frame)){
             print("Intersection")
 //            squareTest1.zPosition = 5
 //            player.zPosition = 10
             print(squareTest1.position.x)
-            print(player.position.x)
-            if(squareTest1.position.x > player.position.x){
+            print(characterAvatar.position.x)
+            if(squareTest1.position.x > characterAvatar.position.x){
                 squareTest1.alpha = 0.2
             } else {
                 squareTest1.alpha = 1
-                player.zPosition = 10
+                characterAvatar.zPosition = 10
             }
             
         } else {

@@ -32,6 +32,8 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     let barrier2 = SKSpriteNode(imageNamed: "BarrierDown")
     let barrier3 = SKSpriteNode(imageNamed: "BarrierUp")
     let barrier4 = SKSpriteNode(imageNamed: "BarrierLeft")
+//    let lowerDoor = SKShapeNode(rectOf: CGSize(width: UIScreen.main.bounds.size.width*0.04, height: UIScreen.main.bounds.size.height*0.1))
+    let lowerDoor = SKSpriteNode(imageNamed: "Lower")
     let music = SKAction.playSoundFileNamed("academy", waitForCompletion: false)
     
     let gameArea: CGRect
@@ -54,7 +56,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
 //    let player = SKSpriteNode(imageNamed: "PlayerBox")
     let player = SKSpriteNode()
     let characterAvatar = SKSpriteNode(imageNamed: "Character")
-    let characterFeetCollider = SKSpriteNode(imageNamed: "CharacterFeet")
+    let characterFeetCollider = SKSpriteNode(imageNamed: "CharacterFeet2")
     
     var move: Bool = false
     var moveSingle: Bool = false
@@ -70,6 +72,15 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         room1.yScale = 0.8
 //        room1.zPosition = 1
         
+        
+//        lowerDoor.position = CGPoint(x: size.width*0.24, y:size.height*0.2)
+        lowerDoor.position = CGPoint(x: size.width*0.17, y: size.height*0.2)
+        lowerDoor.name = "lowerDoor"
+//        lowerDoor.fillColor = .black
+//        lowerDoor.strokeColor = .black
+//        lowerDoor.zRotation = 3.14 * 55 / 180
+        lowerDoor.xScale = 0.8
+        lowerDoor.yScale = 0.8
         barrier1.position = CGPoint(x: size.width*0.5, y: size.height*0.5)
         barrier1.xScale = 0.8
         barrier1.yScale = 0.8
@@ -125,13 +136,16 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         worldGroup.addChild(barrier2)
         worldGroup.addChild(barrier3)
         worldGroup.addChild(barrier4)
+//        worldGroup.addChild(lowerDoor)
         addChild(worldGroup)
+        addChild(lowerDoor)
         
-        
+        characterAvatar.anchorPoint = CGPoint(x: 0.5,y: 0)
+        characterAvatar.position = CGPoint(x: size.width*0.5,y: size.height*0.3)
         characterAvatar.xScale = 0.5
         characterAvatar.yScale = 0.5
         characterAvatar.zPosition = 5
-        characterFeetCollider.position = CGPoint(x: size.width*0.5,y: size.height*0.35)
+        characterFeetCollider.position = CGPoint(x: size.width*0.5,y: size.height*0.31)
         characterFeetCollider.xScale = 0.5
         characterFeetCollider.yScale = 0.5
         characterFeetCollider.physicsBody = SKPhysicsBody(texture: characterFeetCollider.texture!, size: characterFeetCollider.size)
@@ -235,6 +249,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         move = false
+        moveSingle = false
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -279,7 +294,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     }
     
     func checkCollisions(){
-        if(characterAvatar.frame.intersects(self.squareTest1.frame)){
+        if(characterFeetCollider.frame.intersects(self.squareTest1.frame)){
             print("Intersection")
 //            squareTest1.zPosition = 5
 //            player.zPosition = 10
@@ -293,8 +308,20 @@ class Level00: SKScene, SKPhysicsContactDelegate {
             }
             
         } else {
-            print("Don't intersect")
+//            print("Don't intersect")
             squareTest1.alpha = 1
         }
+        
+        if(characterFeetCollider.frame.intersects(lowerDoor.frame)){
+            print(lowerDoor.position)
+            print(characterFeetCollider.position)
+            print("Collision")
+            let newRoom = Level00_2(size: size)
+            view?.presentScene(newRoom)
+//            print("Changing room")
+        } else {
+//            print("Not changing room")
+        }
+        
     }
 }

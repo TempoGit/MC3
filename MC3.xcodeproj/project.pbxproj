@@ -16,6 +16,7 @@
 		4A5C213A27BA8C68001BCF35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A5C213927BA8C68001BCF35 /* Assets.xcassets */; };
 		4A5C213D27BA8C68001BCF35 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A5C213B27BA8C68001BCF35 /* LaunchScreen.storyboard */; };
 		4A5C214827BA9F06001BCF35 /* Level00.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C214727BA9F06001BCF35 /* Level00.swift */; };
+		4AE49DA527BC1147003C573A /* Level00-2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE49DA427BC1147003C573A /* Level00-2.swift */; };
 		52E921AC27BBFF870021627D /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E921AB27BBFF870021627D /* Music.swift */; };
 		52E921AE27BC008B0021627D /* academy.wav in Resources */ = {isa = PBXBuildFile; fileRef = 52E921AD27BC008B0021627D /* academy.wav */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,7 @@
 		4A5C213927BA8C68001BCF35 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A5C213C27BA8C68001BCF35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A5C214727BA9F06001BCF35 /* Level00.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level00.swift; sourceTree = "<group>"; };
+		4AE49DA427BC1147003C573A /* Level00-2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Level00-2.swift"; sourceTree = "<group>"; };
 		52E921AB27BBFF870021627D /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		52E921AD27BC008B0021627D /* academy.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = academy.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,6 +73,7 @@
 				4A5C213227BA8C68001BCF35 /* GameScene.swift */,
 				4A5C213427BA8C68001BCF35 /* GameViewController.swift */,
 				4A5C214727BA9F06001BCF35 /* Level00.swift */,
+				4AE49DA427BC1147003C573A /* Level00-2.swift */,
 				52E921AB27BBFF870021627D /* Music.swift */,
 				4A5C213627BA8C68001BCF35 /* Main.storyboard */,
 				4A5C213927BA8C68001BCF35 /* Assets.xcassets */,
@@ -157,6 +160,7 @@
 				4A5C214827BA9F06001BCF35 /* Level00.swift in Sources */,
 				4A5C213327BA8C68001BCF35 /* GameScene.swift in Sources */,
 				52E921AC27BBFF870021627D /* Music.swift in Sources */,
+				4AE49DA527BC1147003C573A /* Level00-2.swift in Sources */,
 				4A5C213527BA8C68001BCF35 /* GameViewController.swift in Sources */,
 				4A5C212D27BA8C68001BCF35 /* AppDelegate.swift in Sources */,
 			);

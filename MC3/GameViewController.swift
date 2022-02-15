@@ -22,6 +22,7 @@ class GameViewController: UIViewController {
         scene.scaleMode = .aspectFill
         skView.presentScene(scene)
         skView.showsPhysics = true
+        
 //        if let view = self.view as! SKView? {
 //            // Load the SKScene from 'GameScene.sks'
 //            if let scene = SKScene(fileNamed: "GameScene") {

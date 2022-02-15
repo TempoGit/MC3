@@ -22,7 +22,7 @@ struct PhysicsCategories {
 
 class Level00: SKScene, SKPhysicsContactDelegate {
     
-    var backgroundMusicPlayer: AVAudioPlayer!
+//    var backgroundMusicPlayer: AVAudioPlayer!
 
     let goBackLabel = SKLabelNode(text: "Go Back")
     
@@ -178,27 +178,27 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         addChild(squareTest1)
         
         self.scene?.physicsWorld.contactDelegate = self
-        playBackgroundMusic(filename: "academy.wav")
+        musicCheck(filename: "academy.wav")
     }
     
-    func playBackgroundMusic(filename: String) {
-      let resourceUrl = Bundle.main.url(forResource:
-        filename, withExtension: nil)
-      guard let url = resourceUrl else {
-        print("Could not find file: \(filename)")
-    return
-    }
-      do {
-        try backgroundMusicPlayer = AVAudioPlayer(contentsOf: url)
-          backgroundMusicPlayer.numberOfLoops = -1
-          backgroundMusicPlayer.prepareToPlay()
-          backgroundMusicPlayer.play()
-        } catch {
-          print("Could not create audio player!")
-      return
-      }
-        
-    }
+//    func playBackgroundMusic(filename: String) {
+//      let resourceUrl = Bundle.main.url(forResource:
+//        filename, withExtension: nil)
+//      guard let url = resourceUrl else {
+//        print("Could not find file: \(filename)")
+//    return
+//    }
+//      do {
+//        try backgroundMusicPlayer = AVAudioPlayer(contentsOf: url)
+//          backgroundMusicPlayer.numberOfLoops = -1
+//          backgroundMusicPlayer.prepareToPlay()
+//          backgroundMusicPlayer.play()
+//        } catch {
+//          print("Could not create audio player!")
+//      return
+//      }
+//
+//    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
@@ -210,6 +210,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
 
         
         if(touchedNode.name == "goBackName"){
+            musicStop()
             let gameScene = GameScene(size: size)
             view?.presentScene(gameScene)
         }

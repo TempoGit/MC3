@@ -8,6 +8,12 @@
 import UIKit
 import SpriteKit
 
+
+import AVFoundation
+
+
+
+
 struct PhysicsCategories {
     static let Player : UInt32 = 0x1 << 0
     static let MapEdge : UInt32 = 0x1 << 1
@@ -16,6 +22,7 @@ struct PhysicsCategories {
 
 class Level00: SKScene, SKPhysicsContactDelegate {
     
+    var backgroundMusicPlayer: AVAudioPlayer!
 
     let goBackLabel = SKLabelNode(text: "Go Back")
     
@@ -148,6 +155,26 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         addChild(squareTest1)
         
         self.scene?.physicsWorld.contactDelegate = self
+        playBackgroundMusic(filename: "academy.wav")
+    }
+    
+    func playBackgroundMusic(filename: String) {
+      let resourceUrl = Bundle.main.url(forResource:
+        filename, withExtension: nil)
+      guard let url = resourceUrl else {
+        print("Could not find file: \(filename)")
+    return
+    }
+      do {
+        try backgroundMusicPlayer = AVAudioPlayer(contentsOf: url)
+          backgroundMusicPlayer.numberOfLoops = -1
+          backgroundMusicPlayer.prepareToPlay()
+          backgroundMusicPlayer.play()
+        } catch {
+          print("Could not create audio player!")
+      return
+      }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -223,7 +250,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         cameraNode.position = player.position
         
         checkCollisions()
-        run(music)
+        
     
     }
     

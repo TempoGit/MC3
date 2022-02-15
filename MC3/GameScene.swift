@@ -25,7 +25,8 @@ class GameScene: SKScene {
     let houseSpriteMenuMirrored = SKSpriteNode(imageNamed: "House.png")
     var gameTitle = SKLabelNode(text: "SPECULAR")
     let gameTitleMirrored = SKLabelNode(text: "SPECULAR")
-    let backgroundMusic = SKAction.playSoundFileNamed("academy", waitForCompletion: false)
+//    let backgroundMusic = SKAction.playSoundFileNamed("academy", waitForCompletion: false)
+    let backgroundMusic = SKAudioNode(fileNamed: "academy.wav")
     
     override func didMove(to view: SKView) {
         backgroundScreen.size.width = size.width
@@ -71,8 +72,9 @@ class GameScene: SKScene {
         addChild(gameTitleMirrored)
         addChild(playButton)
 
-        run(backgroundMusic)
         
+        addChild(backgroundMusic)
+//        run(backgroundMusic)
     }
     
     
@@ -85,6 +87,7 @@ class GameScene: SKScene {
         let touchedNode = self.atPoint(touchLocation)
         
         if(touchedNode.name == "playGameName"){
+//            audioPlayer.removeAllActions()
             let startGameScene = Level00(size: size)
             view?.presentScene(startGameScene)
         }

@@ -26,6 +26,19 @@ class Level00: SKScene, SKPhysicsContactDelegate {
     let barrier3 = SKSpriteNode(imageNamed: "Barrier3")
     let barrier4 = SKSpriteNode(imageNamed: "Barrier4")
     
+    let gameArea: CGRect
+    
+    override init(size: CGSize) {
+      let playableHeight = size.width
+      let playableMargin = (size.height-playableHeight)/2.0
+        gameArea = CGRect(x: 0, y: playableMargin,
+                                width: size.width,
+                                height: playableHeight)
+          super.init(size: size)
+        }
+        required init(coder aDecoder: NSCoder) {
+          fatalError("init(coder:) has not been implemented")
+        }
     
     
     var worldGroup = SKSpriteNode()
@@ -123,8 +136,10 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         
         
         goBackLabel.name = "goBackName"
-        goBackLabel.position = CGPoint(x: size.width*0.2,y: size.height*0.9)
-        addChild(goBackLabel)
+        goBackLabel.position = CGPoint(x: -gameArea.size.width/3 + CGFloat(10), y: gameArea.size.height*0.9 + CGFloat(10))
+        goBackLabel.zPosition = 10
+//        addChild(goBackLabel)
+        cameraNode.addChild(goBackLabel)
         
         squareTest1.position = CGPoint(x: size.width*0.8,y: size.height*0.3)
         squareTest1.fillColor = .black

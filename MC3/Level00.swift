@@ -22,6 +22,16 @@ struct PhysicsCategories {
 
 class Level00: SKScene, SKPhysicsContactDelegate {
     
+    
+    let closePauseMenu = SKLabelNode(text: "Close pause menu")
+    let goBackToMenu = SKLabelNode(text: "Go back to main menu")
+    let languageButton = SKLabelNode(text: "Language Button")
+    let volumeOnButton = SKSpriteNode(imageNamed: "VolumeOn")
+    let volumeOffButton = SKSpriteNode(imageNamed: "VolumeOff")
+    let backgroundPause = SKShapeNode(rectOf: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+    let pauseSquare = SKShapeNode(rectOf: CGSize(width: UIScreen.main.bounds.size.width*0.7, height: UIScreen.main.bounds.size.height*0.4))
+    
+    let pauseButton = SKSpriteNode(imageNamed: "Pause")
 //    var backgroundMusicPlayer: AVAudioPlayer!
 
     let goBackLabel = SKLabelNode(text: "Go Back")
@@ -195,41 +205,26 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         addChild(cameraNode)
         camera = cameraNode
         cameraNode.position = characterAvatar.position
+
         
-        
-        goBackLabel.name = "goBackName"
-        goBackLabel.position = CGPoint(x: -gameArea.size.width/3 + CGFloat(10), y: gameArea.size.height*0.9 + CGFloat(10))
-        goBackLabel.zPosition = 10
-//        addChild(goBackLabel)
-        cameraNode.addChild(goBackLabel)
+        pauseButton.name = "pause"
+        pauseButton.position = CGPoint(x: -gameArea.size.width/3 + CGFloat(10), y: gameArea.size.height*0.9 + CGFloat(10))
+        pauseButton.zPosition = 20
+        pauseButton.xScale = 0.2
+        pauseButton.yScale = 0.2
+        cameraNode.addChild(pauseButton)
         
         squareTest1.position = CGPoint(x: size.width*0.8,y: size.height*0.3)
         squareTest1.fillColor = .black
         squareTest1.strokeColor = .black
         addChild(squareTest1)
         
+        musicHandler.instance.playBackgroundMusic()
+        
         self.scene?.physicsWorld.contactDelegate = self
-        musicCheck(filename: "academy.wav")
+        
     }
     
-//    func playBackgroundMusic(filename: String) {
-//      let resourceUrl = Bundle.main.url(forResource:
-//        filename, withExtension: nil)
-//      guard let url = resourceUrl else {
-//        print("Could not find file: \(filename)")
-//    return
-//    }
-//      do {
-//        try backgroundMusicPlayer = AVAudioPlayer(contentsOf: url)
-//          backgroundMusicPlayer.numberOfLoops = -1
-//          backgroundMusicPlayer.prepareToPlay()
-//          backgroundMusicPlayer.play()
-//        } catch {
-//          print("Could not create audio player!")
-//      return
-//      }
-//
-//    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
@@ -249,18 +244,83 @@ class Level00: SKScene, SKPhysicsContactDelegate {
        
         }
         
-        if(touchedNode.name == "goBackName"){
-            musicStop()
+        if(touchedNode.name == "goToMenu"){
+            musicHandler.instance.stopLevelBackgroundMusic()
             let gameScene = GameScene(size: size)
             view?.presentScene(gameScene)
         }
-        
-        
+        if(touchedNode.name == "pause"){
+            self.isPaused = true
+            closePauseMenu.zPosition = 102
+            closePauseMenu.fontSize = 26
+            closePauseMenu.fontColor = .white
+            closePauseMenu.position = CGPoint(x: gameArea.size.width*0, y: gameArea.size.height*0.35)
+            closePauseMenu.name = "closePause"
+            goBackToMenu.zPosition = 102
+            goBackToMenu.fontSize = 26
+            goBackToMenu.fontColor = .white
+            goBackToMenu.name = "goToMenu"
+            goBackToMenu.position = CGPoint(x: gameArea.size.width*0, y: -gameArea.size.height*0.4)
+            languageButton.zPosition = 102
+            languageButton.fontSize = 26
+            languageButton.fontColor = .white
+            languageButton.position = CGPoint(x: gameArea.size.width*0, y: gameArea.size.height*0)
+            volumeOffButton.xScale = 0.2
+            volumeOffButton.yScale = 0.2
+            volumeOffButton.name = "volumeOff"
+            volumeOffButton.zPosition = 102
+            volumeOffButton.position = CGPoint(x: gameArea.size.width*0.15, y: gameArea.size.height*0.25)
+            volumeOnButton.xScale = 0.2
+            volumeOnButton.yScale = 0.2
+            volumeOnButton.name = "volumeOn"
+            volumeOnButton.zPosition = 102
+            volumeOnButton.position = CGPoint(x: -gameArea.size.width*0.15, y: gameArea.size.height*0.25)
+            if(musicHandler.instance.mutedMusic){
+                volumeOnButton.alpha = 0.5
+                volumeOffButton.alpha = 1
+            } else if(!musicHandler.instance.mutedMusic) {
+                volumeOnButton.alpha = 1
+                volumeOffButton.alpha = 0.5
+            }
+            pauseSquare.fillColor = .black
+            pauseSquare.strokeColor = .black
+            pauseSquare.zPosition = 101
+            backgroundPause.fillColor = .black
+            backgroundPause.strokeColor = .black
+            backgroundPause.alpha = 0.6
+            backgroundPause.zPosition = 100
+            backgroundPause.name = "closePause"
+            cameraNode.addChild(pauseSquare)
+            cameraNode.addChild(backgroundPause)
+            cameraNode.addChild(volumeOnButton)
+            cameraNode.addChild(volumeOffButton)
+            cameraNode.addChild(closePauseMenu)
+            cameraNode.addChild(goBackToMenu)
+            cameraNode.addChild(languageButton)
+        }
+        if(touchedNode.name == "volumeOff"){
+            volumeOnButton.alpha = 0.5
+            volumeOffButton.alpha = 1
+            musicHandler.instance.muteBackgroundMusic()
+        }
+        if(touchedNode.name == "volumeOn"){
+            volumeOnButton.alpha = 1
+            volumeOffButton.alpha = 0.5
+            musicHandler.instance.unmuteBackgroundMusic()
+        }
+        if(touchedNode.name == "closePause"){
+            languageButton.removeFromParent()
+            backgroundPause.removeFromParent()
+            pauseSquare.removeFromParent()
+            volumeOnButton.removeFromParent()
+            volumeOffButton.removeFromParent()
+            goBackToMenu.removeFromParent()
+            closePauseMenu.removeFromParent()
+            self.isPaused = false
+        }
         if(touchLocation != player.position){
             location = touchLocation
             moveSingle = true
-//            let movePlayerAction = SKAction.move(to: touchLocation, duration: 1)
-//            player.run(movePlayerAction)
         }
     }
 
@@ -288,10 +348,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         if(move || moveSingle){
             if(location.x > characterFeetCollider.position.x) {
                 characterFeetCollider.position.x += 0.8
-//                if(!stopCamera){
-//                    worldGroup.position.x -= 0.8
-//                }
-//                worldGroup.position.x -= 0.8
                 if(location.y > characterFeetCollider.position.y){
                     characterFeetCollider.position.y += 0.8
                     
@@ -300,10 +356,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
                 }
             } else if (location.x < characterFeetCollider.position.x){
                 characterFeetCollider.position.x -= 0.8
-//                if(!stopCamera){
-//                    worldGroup.position.x += 0.8
-//                }
-//                worldGroup.position.x += 0.8
                 if(location.y > characterFeetCollider.position.y){
                     characterFeetCollider.position.y += 0.8
                     
@@ -338,7 +390,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
             }
             
         } else {
-//            print("Don't intersect")
             squareTest1.alpha = 1
         }
         
@@ -348,9 +399,6 @@ class Level00: SKScene, SKPhysicsContactDelegate {
             print("Collision")
             let newRoom = Level00_2(size: size)
             view?.presentScene(newRoom)
-//            print("Changing room")
-        } else {
-//            print("Not changing room")
         }
         
     }

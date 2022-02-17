@@ -25,8 +25,9 @@ class GameScene: SKScene {
     let houseSpriteMenuMirrored = SKSpriteNode(imageNamed: "House.png")
     var gameTitle = SKLabelNode(text: "SPECULAR")
     let gameTitleMirrored = SKLabelNode(text: "SPECULAR")
-//    let backgroundMusic = SKAction.playSoundFileNamed("academy", waitForCompletion: false)
-    let backgroundMusic = SKAudioNode(fileNamed: "academy.wav")
+    
+    let volumeOnButton = SKSpriteNode(imageNamed: "VolumeOn")
+    let volumeOffButton = SKSpriteNode(imageNamed: "VolumeOff")
     
     override func didMove(to view: SKView) {
         backgroundScreen.size.width = size.width
@@ -61,9 +62,28 @@ class GameScene: SKScene {
         
         playButton.position = CGPoint(x: size.width*0.5,y: size.height*0.15)
         playButton.size = CGSize(width: size.width*0.25, height: size.width*0.25)
-//        playButton.xScale = 0.2
-//        playButton.yScale = 0.2
         playButton.name = "playGameName"
+        
+        volumeOnButton.xScale = 0.2
+        volumeOnButton.yScale = 0.2
+        volumeOnButton.name = "volumeOn"
+        volumeOnButton.position = CGPoint(x: size.width*0.3,y: size.height*0.9 )
+        
+        
+        volumeOffButton.xScale = 0.2
+        volumeOffButton.yScale = 0.2
+        volumeOffButton.name = "volumeOff"
+        volumeOffButton.position = CGPoint(x: size.width*0.6,y: size.height*0.9 )
+        
+        if(musicHandler.instance.mutedMusic){
+            volumeOnButton.alpha = 0.5
+            volumeOffButton.alpha = 1
+        } else if(!musicHandler.instance.mutedMusic) {
+            volumeOnButton.alpha = 1
+            volumeOffButton.alpha = 0.5
+        }
+        addChild(volumeOnButton)
+        addChild(volumeOffButton)
         
         
         addChild(houseSpriteMenu)
@@ -72,9 +92,7 @@ class GameScene: SKScene {
         addChild(gameTitleMirrored)
         addChild(playButton)
 
-        
-        addChild(backgroundMusic)
-//        run(backgroundMusic)
+        musicHandler.instance.playBackgroundMusicMenu()
     }
     
     
@@ -87,9 +105,19 @@ class GameScene: SKScene {
         let touchedNode = self.atPoint(touchLocation)
         
         if(touchedNode.name == "playGameName"){
-//            audioPlayer.removeAllActions()
+            musicHandler.instance.stopBackgroundMusicMenu()
             let startGameScene = Level00(size: size)
             view?.presentScene(startGameScene)
+        }
+        if(touchedNode.name == "volumeOff"){
+            volumeOnButton.alpha = 0.5
+            volumeOffButton.alpha = 1
+            musicHandler.instance.muteBackgroundMusic()
+        }
+        if(touchedNode.name == "volumeOn"){
+            volumeOnButton.alpha = 1
+            volumeOffButton.alpha = 0.5
+            musicHandler.instance.unmuteBackgroundMusic()
         }
        
     }

@@ -111,6 +111,9 @@ class Level00_2: SKScene, SKPhysicsContactDelegate {
         cameraNode.addChild(pauseButton)
         
         testObjects.position = CGPoint(x: size.width*0.8,y: size.height*0.3)
+        testObjects.zPosition = 6
+        testObjects.physicsBody?.contactTestBitMask = PhysicsCategories.Player
+        testObjects.physicsBody?.categoryBitMask = PhysicsCategories.MapEdge
         testObjects.fillColor = .black
         testObjects.strokeColor = .black
         testObjects.name = "testObject"
@@ -268,9 +271,10 @@ class Level00_2: SKScene, SKPhysicsContactDelegate {
     func checkCollisions(){
         if(characterFeetCollider.frame.intersects(self.testObjects.frame)){
             print("Intersection")
+            print(testObjects.position.x)
             print(characterAvatar.position.x)
             if(testObjects.position.x > characterAvatar.position.x){
-                testObjects.alpha = 0
+                testObjects.alpha = 1
             } else {
                 testObjects.alpha = 1
                 characterAvatar.zPosition = 10
@@ -278,6 +282,11 @@ class Level00_2: SKScene, SKPhysicsContactDelegate {
             
         } else {
             testObjects.alpha = 1
+        }
+        if(characterFeetCollider.frame.intersects(testObjects.frame)){
+            print(testObjects.position)
+            print(characterFeetCollider.position)
+            print("Collision")
         }
     }
 }

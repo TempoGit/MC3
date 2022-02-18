@@ -87,6 +87,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
 //        lowerDoor.position = CGPoint(x: size.width*0.24, y:size.height*0.2)
         lowerDoor.position = CGPoint(x: size.width*0.17, y: size.height*0.2)
         lowerDoor.name = "lowerDoor"
+        lowerDoor.alpha = 0.01
 //        lowerDoor.fillColor = .black
 //        lowerDoor.strokeColor = .black
 //        lowerDoor.zRotation = 3.14 * 55 / 180
@@ -217,6 +218,7 @@ class Level00: SKScene, SKPhysicsContactDelegate {
         squareTest1.position = CGPoint(x: size.width*0.8,y: size.height*0.3)
         squareTest1.fillColor = .black
         squareTest1.strokeColor = .black
+        squareTest1.name = "posa"
         addChild(squareTest1)
         
         musicHandler.instance.playBackgroundMusic()
